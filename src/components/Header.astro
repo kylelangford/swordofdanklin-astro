@@ -1,0 +1,84 @@
+---
+import Navigation from './Navigation.astro';
+import { Image } from 'astro:assets';
+import logoImage from '../assets/images/crank.png';
+
+---
+
+<header
+  id="mast-head"
+  class="fixed w-full h-26 z-[9999] transition-transform duration-150 ease-in"
+  data-headroom
+>
+  <h1 class="inline m-0">
+    <a
+      href="/"
+      class="site-logo absolute top-5 left-5 text-neutral-500 text-2xl z-[9999] pl-5 transition-colors duration-200"
+    >
+      <!-- SWORD_OF_DANKLIN -->
+               <Image
+          src={logoImage}
+          alt="Crank the Dank"
+          class="logo w-[180px]"
+          loading="eager"
+          quality={90}
+        />
+    </a>
+  </h1>
+
+  <button
+    id="menu-btn"
+    class="fixed top-8 right-8 z-[99999] text-white px-7 py-3 bg-black/16 skew-x-[-8deg] scale-y-105 rounded transition-all duration-200 hover:bg-black/30 cursor-pointer"
+    aria-label="Toggle menu"
+    aria-expanded="false"
+  >
+    Huh?
+  </button>
+
+  <Navigation />
+</header>
+
+<script>
+  // Headroom behavior (vanilla JS replacement)
+  let lastScrollTop = 0;
+  let scrollDirection = 'down';
+  const header = document.getElementById('mast-head');
+  const offset = 100;
+
+  window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (scrollTop > offset) {
+      if (scrollTop > lastScrollTop && scrollDirection !== 'down') {
+        // Scrolling down - hide header
+        header?.classList.add('-translate-y-full');
+        scrollDirection = 'down';
+      } else if (scrollTop < lastScrollTop && scrollDirection !== 'up') {
+        // Scrolling up - show header
+        header?.classList.remove('-translate-y-full');
+        scrollDirection = 'up';
+      }
+    } else {
+      // At top
+      header?.classList.remove('-translate-y-full');
+    }
+
+    lastScrollTop = scrollTop;
+  });
+
+  // Menu toggle
+  const menuBtn = document.getElementById('menu-btn');
+  const nav = document.querySelector('nav.primary');
+  const siteLogo = document.querySelector('.site-logo');
+
+  menuBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    nav?.classList.toggle('overlay');
+    menuBtn.classList.toggle('active');
+    header?.classList.toggle('active');
+    siteLogo?.classList.toggle('active');
+
+    const isExpanded = menuBtn.getAttribute('aria-expanded') === 'true';
+    menuBtn.setAttribute('aria-expanded', String(!isExpanded));
+  });
+</script>

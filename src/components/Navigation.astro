@@ -1,0 +1,83 @@
+<nav class="primary fixed w-screen h-screen opacity-0 z-[-1] bg-primary-500 transition-opacity duration-500 pointer-events-none">
+  <div class="wrap">
+    <div class="white-circle">
+      <svg class="lumpy-circle-bg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path fill="white" d="M 100, 100
+          m -75, 0
+          a 75,75 0 0,1 75,-75
+          a 75,75 0 0,1 75,75
+          a 75,75 0 0,1 -75,75
+          a 75,75 0 0,1 -75,-75
+          z" />
+      </svg>
+      <div class="message-knockout text-center">
+        <h3 class="text-primary-500 font-display font-bold text-3xl mb-4">DANKLIN</h3>
+        <p class="text-primary-500 font-display font-normal text-2xl md:text-xl">
+          Danklin is a state of mind, a place found deep inside your soul.
+        </p>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Animate the SVG path to create a lumpy, organic feel
+  function createLumpyCircle() {
+    const path = document.querySelector('.lumpy-circle-bg path');
+    if (!path) return;
+
+    const baseRadius = 75;
+    const points = 10;
+    const variation = 6; // Subtle variation
+
+    let d = '';
+    const coords = [];
+
+    // Generate all points first
+    for (let i = 0; i < points; i++) {
+      const angle = (i / points) * Math.PI * 2;
+      const radiusVariation = variation * (Math.random() - 0.5);
+      const radius = baseRadius + radiusVariation;
+
+      const x = 100 + radius * Math.cos(angle);
+      const y = 100 + radius * Math.sin(angle);
+      coords.push({ x, y, radius, angle });
+    }
+
+    // Create path with cubic bezier curves
+    for (let i = 0; i < points; i++) {
+      const current = coords[i];
+      const next = coords[(i + 1) % points];
+
+      if (i === 0) {
+        d += `M ${current.x},${current.y} `;
+      }
+
+      // Subtle control points
+      const cpDist1 = current.radius * 0.45;
+      const cpDist2 = next.radius * 0.45;
+
+      const cpAngle1 = current.angle + Math.PI / 2 + (Math.random() - 0.5) * 0.2;
+      const cpAngle2 = next.angle - Math.PI / 2 + (Math.random() - 0.5) * 0.2;
+
+      const cp1x = current.x + cpDist1 * Math.cos(cpAngle1);
+      const cp1y = current.y + cpDist1 * Math.sin(cpAngle1);
+      const cp2x = next.x + cpDist2 * Math.cos(cpAngle2);
+      const cp2y = next.y + cpDist2 * Math.sin(cpAngle2);
+
+      d += `C ${cp1x},${cp1y} ${cp2x},${cp2y} ${next.x},${next.y} `;
+    }
+
+    d += 'Z';
+    path.setAttribute('d', d);
+  }
+
+  // Run when navigation becomes visible
+  const menuBtn = document.getElementById('menu-btn');
+  menuBtn?.addEventListener('click', () => {
+    const nav = document.querySelector('nav.primary');
+    if (nav?.classList.contains('overlay')) {
+      createLumpyCircle();
+    }
+  });
+</script>

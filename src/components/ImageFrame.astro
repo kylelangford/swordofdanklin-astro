@@ -1,0 +1,22 @@
+---
+export interface Props {
+  type: 'white' | 'dark';
+}
+
+const { type } = Astro.props;
+
+const baseClasses = 'rounded-sm inline-block p-[6vmin] relative text-center box-border border-[5vmin] shadow-[0_0_5px_0_rgba(0,0,0,.25)_inset,0_5px_10px_5px_rgba(0,0,0,.25)]';
+
+const frameClasses = {
+  white: 'bg-neutral-100 border-neutral-200 border-b-neutral-800 border-l-neutral-900 border-r-neutral-900 border-t-black',
+  dark: 'bg-neutral-800 border-neutral-200 border-b-neutral-800 border-l-neutral-900 border-r-neutral-900 border-t-black',
+};
+
+const imgBorder = 'border-2 border-b-[#ffe] border-l-[#eed] border-r-[#eed] border-t-[#ccb]';
+---
+
+<div class={`${baseClasses} ${frameClasses[type]}`}>
+  <div class={imgBorder}>
+    <slot />
+  </div>
+</div>

@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import ImageFrame from './ImageFrame.astro';
+
+export interface Props {
+  src: string;
+  title: string;
+  year: string;
+  frameType?: 'white' | 'dark' | 'none';
+  hasPaper?: boolean;
+}
+
+const { src, title, year, frameType = 'none', hasPaper = false } = Astro.props;
+
+// Import image dynamically
+const images = import.meta.glob<{ default: ImageMetadata }>('/src/assets/images/*.{png,jpg,jpeg}', { eager: true });
+const imagePath = `/src/assets/images/${src}`;
+const imageModule = images[imagePath];
+
+if (!imageModule) {
+  throw new Error(`Image not found: ${imagePath}`);
+}
+---
+
+<div class="item text-left mb-48">
+  {frameType !== 'none' ? (
+    <ImageFrame type={frameType}>
+      <Image
+        src={imageModule.default}
+        alt={title}
+        loading="lazy"
+        quality={85}
+        class="w-full h-auto"
+      />
+    </ImageFrame>
+  ) : (
+    <Image
+      src={imageModule.default}
+      alt={title}
+      loading="lazy"
+      quality={85}
+      class="w-full h-auto"
+    />
+  )}
+
+  <div class={`description inline-block px-5 py-4 my-12 mx-6 text-left ${hasPaper ? 'paper' : ''}`}>
+    <h2 class="text-xl font-sans font-bold leading-tight mb-1.5">{title}</h2>
+    <em class="font-display not-italic">{year}</em>
+  </div>
+</div>

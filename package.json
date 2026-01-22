@@ -3,12 +3,19 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --open",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.16.12"
+    "@astrojs/tailwind": "^6.0.2",
+    "@fontsource/montserrat": "^5.2.8",
+    "@fontsource/raleway": "^5.2.8",
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.16.12",
+    "sharp": "^0.34.5",
+    "swiper": "^12.0.3",
+    "tailwindcss": "^4.1.18"
   }
 }
